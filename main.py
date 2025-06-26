@@ -10,7 +10,6 @@ from dotenv import load_dotenv
 import json
 
 load_dotenv()
-
 # Gmail credentials
   # Comma-separated list of recipients
 
@@ -34,10 +33,10 @@ def send_email(data, EMAIL, APP_PASSWORD, recipients):
     msg["To"] = ", ".join(recipients)  # Displayed list in the email header
     from datetime import datetime
 
-    current_date = datetime.strptime("5/22/2024", "%m/%d/%Y").strftime("%B %d, %Y")
+    current_date = datetime.now().strftime("%B %d, %Y")
     msg["Subject"] = f"[AUTO] Barton Cleaning Chore - Week of {current_date}"
 
-    link= "https://www.icloud.com/notes/0c50Q7W6o4OxD4agg0b77mc8g#Cleaning"
+    link= "https://docs.google.com/document/d/1-g94_h1lE9z1vHkeMQp4jJfQI7Yo_tGtbuDt9z0zZVg/edit?tab=t.0"
     body_content = ""
     for i, chore in enumerate(data.get("chores", [])):
         person = data.get("people", [])[i % len(data.get("people", []))]
@@ -60,13 +59,17 @@ def send_email(data, EMAIL, APP_PASSWORD, recipients):
 
 def main():
     
+    load_dotenv()
+    # print("Raw RECIPIENTS:", os.getenv("RECIPIENTS"))
+    
     EMAIL = os.getenv("GMAIL_USER")  # Your Gmail address
     APP_PASSWORD = str(os.getenv("GMAIL_APPPASSWORD"))  # Your Gmail App Password
     recipients = os.getenv("RECIPIENTS").split(",")
 
-    # print("Recipients:", recipients)
-    # print("Email:", EMAIL)
-    # print("App Password:", APP_PASSWORD)
+    print("Recipients:", recipients)
+
+    
+    # nateh353@gmail.com,morriskache@gmail.com,
 
     data = {}
     # Load data from a JSON file
@@ -79,9 +82,11 @@ def main():
 
 
 if __name__ == "__main__":
-    # Schedule to run every Tuesday at 6 AM
-    schedule.every().tuesday.at("06:00").do(send_email)
-# # Keep the script running
-    while True:
-        schedule.run_pending()
-        time.sleep(7200)
+    # load_dotenv()
+    # Schedule to run every wednesday at 6 AM
+    main()
+#     schedule.every().wednesday.at("06:00").do(main)
+# # # Keep the script running
+#     while True:
+#         schedule.run_pending()
+#         time.sleep(7200)
